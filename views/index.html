@@ -27,8 +27,19 @@
 </html>
 
 <script>
+    /*
+    JWT
+    CPR
+    {
+      "cpr":"1",
+      "iat":1000,
+      "exp":1600
+    }
+    */
 
     window.addEventListener('message', function(e) {
+        if(e.data=='no')
+            return
         console.log(e.data)
-    })
+    }, true)
 </script>
