@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST!!</title>
+</head>
+<body>
+    <h1>Mandatory 1 code check</h1>
+    <form action="/jwt_code" method="post">
+        <input type = "text" name = "four_code"  pattern="[0-9]{4}" title="4 digit number: e.g. 1234" required>
+        <input id="4_code" type="submit" name="send_4_code" value="Validate code">
+    </form>
+</body>
+</html>
