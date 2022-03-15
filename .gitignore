@@ -2,5 +2,6 @@ bin/
 include/
 lib/
 pyvenv.cfg
-wed-03-02/get_api_key.py
-wed-03-02/get_email.py
+get_api_key.py
+get_email.py
+get_phone.py
