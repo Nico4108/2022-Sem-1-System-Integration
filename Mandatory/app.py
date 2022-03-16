@@ -47,15 +47,21 @@ def get_jwt():
         return r.status_code    
 
     # Connect to database
-    conn = sqlite3.connect('Mandatory1.db')
-    conn.execute(f"INSERT INTO codes (phone, fourcode) VALUES ({phone}, {four_code})")
-    conn.commit()
+    try:
+        conn = sqlite3.connect('Mandatory1.db')
+        conn.execute(f"INSERT INTO codes (phone, fourcode) VALUES ({phone}, {four_code})")
+        conn.commit()
 
-    # Show data
-    c = conn.cursor()
-    c.execute("SELECT * FROM codes")
-    result = c.fetchall()
-    print(result)
+        # Show data
+        c = conn.cursor()
+        c.execute("SELECT * FROM codes")
+        result = c.fetchall()
+        print(result)
+    except Exception as ex:
+        print(ex)
+    # MUST CLOSE DB!!
+    finally:
+        conn.close()
 
     return template('jwt')
     
@@ -72,6 +78,9 @@ def four_code():
         code_result = c.fetchall()
     except:
         return template('jwt')
+    # MUST CLOSE DB!!
+    finally:
+        conn.close()
         
     if code_result:
         print(code_result)

@@ -7,8 +7,6 @@ from bottle import get, run, view, default_app
 def _():
     return
 
-
-
 ############################
 try:
     # Server AWS (Production)
