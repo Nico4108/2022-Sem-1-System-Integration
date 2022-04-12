@@ -13,11 +13,33 @@ def jwtFunc():
     print(encoded_jwt)
     return encoded_jwt
 
+#MitID
+##############################
+
+@route('/')
+def _():
+    #jwt = jwtFunc()
+    return template('mitid')
+
+@route('/jwt_mitid', method='POST')
+def get_mitid_jwt():
+    try:
+        token = request.json
+        print ('jwt String is:', token)
+        print(token.get('jwt'))
+        jwt.decode(token.get('jwt'), key='secret', algorithms='HS256')
+        
+        jwt = jwtFunc()
+        return template('index', data=jwt)
+        #return 'welcome'
+    except:
+        return "JWT Token is invalid!"
+
 ##############################
 #@get("/")
 #@view("index")
-@route('/')
-def _():
+@route('/index')
+def index():
     jwt = jwtFunc()
     return template('index', data=jwt)
 
