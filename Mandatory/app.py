@@ -2,6 +2,7 @@ from bottle import get, run, view, default_app, request, route, template, respon
 import jwt, time, random, requests
 from get_api_key import api_key
 import sqlite3
+from send_email import send_email
 
 ##############################
 def jwtFunc():
@@ -11,7 +12,6 @@ def jwtFunc():
     encoded_jwt = jwt.encode({"cpr": cpr, "iat": iat, "exp": exp}, "secret", algorithm ="HS256")
     print(encoded_jwt)
     return encoded_jwt
-
 
 ##############################
 #@get("/")
@@ -35,30 +35,30 @@ def get_jwt():
     four_code = random.randint(1111, 9999)
     print(four_code)
 
-    phone = request.forms.get('phone')
-    print(phone)
+    email = request.forms.get('email')
+    print(email, type(email))
 
     # Send code to phone
     try:
-        payload = {"to_phone": phone, "message": four_code, "api_key":api_key}
-        r = requests.post("https://fatsms.com/send-sms", data=payload)
-        print(r.status_code)
-    except:
-        return r.status_code    
+        send_email(email, four_code)
+    except Exception as ex:
+        return ex
 
     # Connect to database
     try:
-        conn = sqlite3.connect('Mandatory1.db')
-        conn.execute(f"INSERT INTO codes (phone, fourcode) VALUES ({phone}, {four_code})")
+        conn = sqlite3.connect('Mandatory.db')
+        #conn.execute('CREATE TABLE IF NOT EXISTS codes ([email] TEXT, [fourcode] TEXT)')
+        #conn.execute("CREATE TABLE codes (email char(50), fourcode char(4))")
+        conn.execute(f"INSERT INTO codes (email, fourcode) VALUES ('{email}', {four_code})")
         conn.commit()
 
         # Show data
         c = conn.cursor()
         c.execute("SELECT * FROM codes")
         result = c.fetchall()
-        print(result)
+        print(result, '<----1')
     except Exception as ex:
-        print(ex)
+        print(ex, '<----2')
     # MUST CLOSE DB!!
     finally:
         conn.close()
@@ -72,7 +72,7 @@ def four_code():
     try:
         code = request.forms.get("four_code")
         
-        conn = sqlite3.connect('Mandatory1.db')
+        conn = sqlite3.connect('Mandatory.db')
         c = conn.cursor()
         c.execute(f"SELECT * FROM codes WHERE fourcode={code}")
         code_result = c.fetchall()
