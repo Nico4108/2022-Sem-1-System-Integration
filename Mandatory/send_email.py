@@ -3,18 +3,14 @@
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import random
+from private_info import *
 
 def send_email(receiver_email, random_auth_code):
-    sender_email = "nicspieg0208@gmail.com"
-    #receiver_email = "nicspieg0208@gmail.com"
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Verification Code"
     message["From"] = sender_email
     message["To"] = receiver_email
-
-    #random_auth_code = random.randint(100000, 999999)
 
     # Create the plain-text and HTML version of your message
     text = f"""\

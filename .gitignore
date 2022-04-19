@@ -5,3 +5,4 @@ pyvenv.cfg
 get_api_key.py
 get_email.py
 get_phone.py
+private_info.py

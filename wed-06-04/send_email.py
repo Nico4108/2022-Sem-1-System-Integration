@@ -4,10 +4,8 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
+from private_info import *
 
-
-sender_email = "nicspieg0208@gmail.com"
-receiver_email = "nicspieg0208@gmail.com"
 
 message = MIMEMultipart("alternative")
 message["Subject"] = "Verification Code"
