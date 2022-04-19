@@ -1,17 +1,20 @@
-from bottle import get, run, view, default_app, request, route, template, response
-import jwt, time, random, requests
-from get_api_key import api_key
+from bottle import run, default_app, request, route, template, redirect
+import jwt, time, random
+#from get_api_key import api_key
 import sqlite3
 from send_email import send_email
 
 ##############################
 def jwtFunc():
-    cpr = "12345"
-    iat = int(time.time())
-    exp = iat + 600000
-    encoded_jwt = jwt.encode({"cpr": cpr, "iat": iat, "exp": exp}, "secret", algorithm ="HS256")
-    print(encoded_jwt)
-    return encoded_jwt
+    try:
+        cpr = "12345"
+        iat = int(time.time())
+        exp = iat + 600000
+        encoded_jwt = jwt.encode({"cpr": cpr, "iat": iat, "exp": exp}, "secret", algorithm ="HS256")
+        print(encoded_jwt, '<--- encoded_jwt')
+        return encoded_jwt
+    except Exception as ex:
+        print(ex, 'Error, encoded_jwt!')
 
 #MitID
 ##############################
@@ -26,11 +29,12 @@ def get_mitid_jwt():
     try:
         token = request.json
         print ('jwt String is:', token)
-        print(token.get('jwt'))
+        print(token.get('jwt')) 
         jwt.decode(token.get('jwt'), key='secret', algorithms='HS256')
         
-        jwt = jwtFunc()
-        return template('index', data=jwt)
+        jwt_ = jwtFunc()
+        #redirect('/welcome')
+        return template('index', data=jwt_)
         #return 'welcome'
     except:
         return "JWT Token is invalid!"
@@ -38,10 +42,10 @@ def get_mitid_jwt():
 ##############################
 #@get("/")
 #@view("index")
-@route('/index')
+'''@route('/index')
 def index():
     jwt = jwtFunc()
-    return template('index', data=jwt)
+    return template('index', data=jwt)'''
 
 
 ##############################

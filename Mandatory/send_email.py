@@ -3,7 +3,7 @@
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from private_info import *
+from private_info import password, sender_email
 
 def send_email(receiver_email, random_auth_code):
 
