@@ -1,8 +1,9 @@
 from bottle import get, run, response, post, request
-import json, yaml
+import json, yaml, csv
 from dict2xml import dict2xml
 import pandas as pd
 import sqlite3
+import xml.etree.ElementTree as ET
 
 users = {
     '12345':{'id':'1', 'email':'@a', 'token':'12345'},
@@ -104,8 +105,8 @@ def _(pro_id, token, format):
         if format == 'JSON':
             response.content_type = 'application/json'
             message = request.json
-            #conn.execute(f"INSERT INTO patient (id, name, cpr, adress, access) VALUES ('{message['id']}', '{message['name']}', '{message['cpr']}', '{message['adress']}', '{message['access']}')")
-            #conn.commit()
+            conn.execute(f"INSERT INTO patient (id, name, cpr, adress, access) VALUES ('{message['id']}', '{message['name']}', '{message['cpr']}', '{message['adress']}', '{message['access']}')")
+            conn.commit()
             print(message)
 
             return message
@@ -113,17 +114,43 @@ def _(pro_id, token, format):
         elif format == 'XML':
             response.content_type = 'application/xml'
             message = request.body.getvalue()
-            print(message)
+            data = ET.fromstring(message)
+            conn.execute(f"INSERT INTO patient (id, name, cpr, adress, access) VALUES ('{data[0][1].text}', '{data[0][2].text}', '{data[0][3].text}', '{data[0][4].text}', '{data[0][0].text}')")
+            conn.commit()
             return message
 
         elif format == 'YAML':
             response.content_type = 'application/yaml'
             message = request.body.getvalue()
+            data = yaml.safe_load(message)
+            conn.execute(f"INSERT INTO patient (id, name, cpr, adress, access) VALUES ('{data['messages'][0]['id']}', '{data['messages'][0]['name']}', '{data['messages'][0]['cpr']}', '{data['messages'][0]['adress']}', '{data['messages'][0]['access']}')")
+            conn.commit()
+            print(message)
             return message
 
         elif format == 'TSV':
             data = request.body.getvalue()
+            data = data.decode("utf-8")
             print(data)
+            with open('./output.tsv', 'wt') as out_file:
+                out_file.write(data)
+
+            #tsv_file = open("output.tsv")
+            file = pd.read_csv('output.tsv', sep='\t')
+            #read_tsv = csv.reader(tsv_file, delimiter="\t")
+            print(file['id'])
+            print(file['name'])
+            #for row in file:
+                #for v in row:
+            #print(row, '<--')
+                #tsv_writer = csv.writer(out_file, delimiter='\t')
+
+            #labels = data.split('\t')
+            #print(labels)
+           # print(values)
+            #conn.execute(f"INSERT INTO patient (id, name, cpr, adress, access) VALUES ('{data['messages'][0]['id']}', '{data['messages'][0]['name']}', '{data['messages'][0]['cpr']}', '{data['messages'][0]['adress']}', '{data['messages'][0]['access']}')")
+            #conn.commit()
+            #print(data)
             return data
         
     
