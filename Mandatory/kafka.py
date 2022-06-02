@@ -60,10 +60,11 @@ def _(token, cpr):
         response.content_type = 'application/json'
         c = conn.cursor()
         c.row_factory = row_to_dict
-        c.execute(f"SELECT * FROM patient WHERE cpr='{cpr}'")
+        c.execute(f"SELECT * FROM patient JOIN journal ON patient.cpr = journal.patient_cpr WHERE patient.cpr='{cpr}'")
+        #c.execute(f"SELECT * FROM patient WHERE cpr in (SELECT date_ FROM journal WHERE patient_cpr='{cpr}')")
         result = c.fetchall()
         return json.dumps(result)
-    
+
     except Exception as ex:
         response.status = 400
         return str(ex)
