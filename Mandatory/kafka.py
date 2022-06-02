@@ -29,8 +29,8 @@ messages = {
     ]  
 }
 # Add CPR and create db table!
-recept = {
-                'recept': [
+prescription = {
+                'prescription': [
                 {
                     'doc': 'Donald Doc',
                     'medicine': 'Morphine',
@@ -68,7 +68,7 @@ def _(token, cpr):
         response.status = 400
         return str(ex)
 
-@get('/provider/recept/cpr/<cpr>/token/<token>/JSON')
+@get('/provider/prescription/cpr/<cpr>/token/<token>/JSON')
 def _(token, cpr):
     try:
         conn = sqlite3.connect('Mandatory.db')
@@ -80,7 +80,7 @@ def _(token, cpr):
         response.content_type = 'application/json'
         c = conn.cursor()
         c.row_factory = row_to_dict
-        c.execute(f"SELECT * FROM recept WHERE cpr='{cpr}'")
+        c.execute(f"SELECT * FROM prescription WHERE cpr='{cpr}'")
         result = c.fetchall()
         return json.dumps(result)
     
@@ -108,7 +108,7 @@ def _(token):
         response.status = 400
         return str(ex)
 
-@post('/provider/recept/token/<token>/JSON')
+@post('/provider/prescription/token/<token>/JSON')
 def _(token):
     try: 
         conn = sqlite3.connect('Mandatory.db')
@@ -118,7 +118,7 @@ def _(token):
 
         response.content_type = 'application/json'
         message = request.json
-        conn.execute(f"INSERT INTO recept (doc, medicine, amount) VALUES ('{message['doc']}', '{message['medicine']}', '{message['amount']}')")
+        conn.execute(f"INSERT INTO prescription (doc, medicin, amount) VALUES ('{message['doc']}', '{message['medicine']}', '{message['amount']}')")
         conn.commit()
         print(message)
 
@@ -187,7 +187,7 @@ def _(token, cpr):
         response.status = 400
         return str(ex)
 
-@get('/provider/recept/cpr/<cpr>/token/<token>/XML')
+@get('/provider/prescription/cpr/<cpr>/token/<token>/XML')
 def _(token, cpr):
     try:
         conn = sqlite3.connect('Mandatory.db')
@@ -200,7 +200,7 @@ def _(token, cpr):
         xml_list = []
         c = conn.cursor()
         c.row_factory = row_to_dict
-        c.execute(f"SELECT * FROM recept WHERE cpr='{cpr}'")
+        c.execute(f"SELECT * FROM prescription WHERE cpr='{cpr}'")
         result = c.fetchall()
 
         for msg in result:
@@ -235,7 +235,7 @@ def _(token):
         response.status = 400
         return str(ex)
 
-@post('/provider/recept/token/<token>/XML')
+@post('/provider/prescription/token/<token>/XML')
 def _(token):
     try: 
         conn = sqlite3.connect('Mandatory.db')
@@ -246,7 +246,7 @@ def _(token):
         response.content_type = 'application/xml'
         message = request.body.getvalue()
         data = ET.fromstring(message)
-        conn.execute(f"INSERT INTO recept (doc, medicine, amount) VALUES ('{data['doc']}', '{data['medicine']}', '{data['amount']}')")
+        conn.execute(f"INSERT INTO prescription (doc, medicine, amount) VALUES ('{data['doc']}', '{data['medicine']}', '{data['amount']}')")
         conn.commit()
         print(message)
         
@@ -310,7 +310,7 @@ def _(token, cpr):
         response.status = 400
         return str(ex)
 
-@get('/provider/recept/cpr/<cpr>/token/<token>/YAML')
+@get('/provider/prescription/cpr/<cpr>/token/<token>/YAML')
 def _(token, cpr):
     try:
         conn = sqlite3.connect('Mandatory.db')
@@ -322,7 +322,7 @@ def _(token, cpr):
         response.content_type = 'application/yaml'
         c = conn.cursor()
         c.row_factory = row_to_dict
-        c.execute(f"SELECT * FROM recept WHERE cpr='{cpr}'")
+        c.execute(f"SELECT * FROM prescription WHERE cpr='{cpr}'")
         result = c.fetchall()
 
         data = 'messages:' + '\n'
@@ -353,7 +353,7 @@ def _(token):
         response.status = 400
         return str(ex)
 
-@post('/provider/recept/token/<token>/YAML')
+@post('/provider/prescription/token/<token>/YAML')
 def _(token):
     try: 
         conn = sqlite3.connect('Mandatory.db')
@@ -364,7 +364,7 @@ def _(token):
         response.content_type = 'application/yaml'
         message = request.body.getvalue()
         data = yaml.safe_load(message)
-        conn.execute(f"INSERT INTO recept (doc, medicine, amount) VALUES ('{data['doc']}', '{data['medicine']}', '{data['amount']}')")
+        conn.execute(f"INSERT INTO prescription (doc, medicine, amount) VALUES ('{data['doc']}', '{data['medicine']}', '{data['amount']}')")
         conn.commit()
         print(message)
         return message
@@ -429,7 +429,7 @@ def _(token, cpr):
         response.status = 400
         return str(ex)
 
-@get('/provider/recept/cpr/<cpr>/token/<token>/TSV')
+@get('/provider/prescription/cpr/<cpr>/token/<token>/TSV')
 def _(token, cpr):
     try:
         conn = sqlite3.connect('Mandatory.db')
@@ -440,7 +440,7 @@ def _(token, cpr):
         
         c = conn.cursor()
         c.row_factory = row_to_dict
-        c.execute(f"SELECT * FROM recept WHERE cpr='{cpr}'")
+        c.execute(f"SELECT * FROM prescription WHERE cpr='{cpr}'")
         result = c.fetchall()
         data = pd.DataFrame.from_records(result)
         return data.to_csv(sep='\t', index=False)
@@ -479,7 +479,7 @@ def _(token):
         response.status = 400
         return str(ex)
 
-@post('/provider/recept/token/<token>/TSV')
+@post('/provider/prescription/token/<token>/TSV')
 def _(token):
     try: 
         conn = sqlite3.connect('Mandatory.db')
@@ -498,7 +498,7 @@ def _(token):
         doc = file['doc'].to_list()
         medicine = file['medicine'].to_list()
         amount = file['amount'].to_list()
-        conn.execute(f"INSERT INTO recept (doc, medicine, amount) VALUES ('{doc[0]}', '{medicine[0]}', '{amount[0]}')")
+        conn.execute(f"INSERT INTO prescription (doc, medicine, amount) VALUES ('{doc[0]}', '{medicine[0]}', '{amount[0]}')")
         conn.commit()
         return data
     
