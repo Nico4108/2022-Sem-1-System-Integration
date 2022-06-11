@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hangy</title>
 </head>
-<body>
+<body id = "app">
 
     <nav>
         <a href="/">Home</a>
@@ -19,6 +19,8 @@
         src="https://mitid.eu.pythonanywhere.com/" 
         frameborder="0"
         style="height: 18rem"
+        target = "_blank"
+        
         >
     </iframe>
     </main>
@@ -38,7 +40,8 @@
     */
 
     window.addEventListener('message', function(e) {
-        //console.log(e.data)
+        console.log(e)
+        var jwt_res
 
         // POST request using fetch()
         fetch("http://127.0.0.1:3333/jwt_mitid", {
@@ -56,12 +59,7 @@
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-        
-        // Converting to JSON
-        .then(response => response.json())
-        
-        // Displaying results to console
-        .then(json => console.log(json));
-
+        .then(redirect => window.location.replace("http://127.0.0.1:3333/jwt"));
     }, true)
+
 </script>
