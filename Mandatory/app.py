@@ -33,6 +33,7 @@ def get_mitid_jwt():
             payload = {"to_phone": phonenumber, "message": four_code, "api_key":api_key}
             r = requests.post("https://fatsms.com/send-sms", data=payload)
             print(r.status_code)
+            print('Code: ', four_code)
         except:
             print("No SMS for You") 
         try:
@@ -81,12 +82,12 @@ def four_code():
         token_doctor = c.execute(f"SELECT token FROM doctor WHERE cpr='{ref_code['cpr']}'")
         t_doctor= token_doctor.fetchall()
         if t_doctor:
-            return f"Token: {t_doctor[0]}"
+            return f"Doctor token: {t_doctor[0]}"
 
         token_pharma = c.execute(f"SELECT token FROM pharma WHERE cpr='{ref_code['cpr']}'")
         t_pharma= token_pharma.fetchall()
         if t_pharma:
-            return f"Token: {t_pharma[0]}"
+            return f"Pharma token: {t_pharma[0]}"
         conn.close()
         #msg = 'You are logged in'
         #return template('welcome')

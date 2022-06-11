@@ -8,42 +8,6 @@ import pandas as pd
 import sqlite3
 import xml.etree.ElementTree as ET
 
-# 505 COMMENT
-
-users = {
-    '12345':{'id':'1', 'email':'@a', 'token':'12345'},
-    '67890':{'id':'2', 'email':'@a', 'token':'67890'},
-}
-
-messages = {
-    'patient':[
-        {
-            'id':'aaa0381a-4a37-4caf-af5f-aae31933749c',
-            'name': 'Karen Hansen', 
-            'cpr':'112233-4454',
-            'adress': 'Vejen 5, Vejen 6666',
-            'access':'*'
-        },
-        {
-            'id':'aaa0381a-4a37-4caf-af5f-hjkjkksksks',
-            'name': 'Leif Badingado', 
-            'cpr':'556644-1091',
-            'adress': 'Roaden 10, Road 8888',
-            'access':'*'
-        }
-    ]  
-}
-# Add CPR and create db table!
-prescription = {
-                'prescription': [
-                {
-                    'doc': 'Donald Doc',
-                    'medicine': 'Morphine',
-                    'amount': '200mg'
-                }
-            ]
-}
-
 def row_to_dict(cursor: sqlite3.Cursor, row: sqlite3.Row) -> dict:
             data = {}
             for idx, col in enumerate(cursor.description):

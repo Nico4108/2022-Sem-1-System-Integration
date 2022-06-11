@@ -5,12 +5,12 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from private_info import password, sender_email
 
-def send_email(receiver_email, random_auth_code):
+def send_email(random_auth_code):
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Verification Code"
     message["From"] = sender_email
-    message["To"] = receiver_email
+    message["To"] = sender_email
 
     # Create the plain-text and HTML version of your message
     text = f"""\
@@ -41,6 +41,6 @@ def send_email(receiver_email, random_auth_code):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         try:
             server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message.as_string())
+            server.sendmail(sender_email, sender_email, message.as_string())
         except Exception as ex:
             print(ex)
